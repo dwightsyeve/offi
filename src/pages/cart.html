@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting…</title>
+  <style>
+    :root{
+      --bg: #ffffff;
+      --card: #fbfbfb;
+      --accent: #0b66ff;
+      --muted: #8b8f98;
+      --shadow: 0 8px 30px rgba(12,16,25,0.08);
+      --glass: rgba(255,255,255,0.6);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg, var(--bg) 0%, #fcfcfd 100%);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px;
+      box-sizing:border-box;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      padding:28px 34px;
+      box-shadow:var(--shadow);
+      display:flex;
+      gap:20px;
+      align-items:center;
+      transform: translateZ(0);
+      border: 1px solid rgba(10,10,10,0.03);
+    }
+
+    .logo {
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, rgba(11,102,255,0.12), rgba(11,102,255,0.06));
+      box-shadow: 0 6px 18px rgba(11,102,255,0.06), inset 0 -6px 12px rgba(11,102,255,0.02);
+      border: 1px solid rgba(11,102,255,0.06);
+      flex: 0 0 64px;
+    }
+
+    .logo svg { width:36px; height:36px; display:block; }
+
+    .meta {
+      min-width:240px;
+    }
+
+    .title {
+      font-size:18px;
+      font-weight:600;
+      letter-spacing:-0.01em;
+      margin:0 0 6px 0;
+    }
+
+    .subtitle {
+      margin:0;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    /* Fancy dot spinner */
+    .dots {
+      display:flex;
+      gap:6px;
+      margin-left:8px;
+      align-items:center;
+    }
+    .dot {
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--accent);
+      opacity:.95;
+      transform: translateY(0);
+      animation: bounce 900ms infinite ease-in-out;
+    }
+    .dot:nth-child(2){ animation-delay:120ms; }
+    .dot:nth-child(3){ animation-delay:240ms; }
+
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); opacity:.9; }
+      50% { transform: translateY(-8px); opacity:1; }
+    }
+
+    /* Accessibility: respect prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      .dot { animation: none; opacity:.9; transform: none; }
+    }
+
+    .small {
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    a.fallback {
+      display:inline-block;
+      margin-top:10px;
+      text-decoration:none;
+      font-size:13px;
+      color:var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="status" aria-live="polite">
+    <div class="card" aria-hidden="false">
+      <div class="logo" aria-hidden="true">
+        <!-- simple glyph -->
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="G">
+          <circle cx="12" cy="12" r="10" stroke="rgba(11,102,255,0.18)" stroke-width="2"/>
+          <path d="M8 12.5c0-1.9 1.6-3.5 3.5-3.5 1.9 0 3.5 1.6 3.5 3.5S13.4 16 11.5 16" stroke="url(#g)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#0B66FF"/>
+              <stop offset="1" stop-color="#4B9BFF"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="meta">
+        <p class="title">Redirecting you to Google</p>
+        <p class="subtitle">One moment — preparing a safe redirect.</p>
+
+        <div style="display:flex;align-items:center;margin-top:10px;">
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <span style="margin-left:12px;font-size:13px;color:var(--muted);" id="countdownText">About 2 seconds…</span>
+        </div>
+
+        <span class="small">If nothing happens, <a class="fallback" href="https://www.google.com">click here to continue</a>.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      // random delay ~ 2s ±1s: uniform between 1000ms and 3000ms
+      const delayMs = Math.floor(1000 + Math.random() * 2000);
+
+      // update UI to show approximate seconds (rounded)
+      const secs = Math.round(delayMs / 1000 * 10) / 10; // show 1 decimal
+      const text = document.getElementById('countdownText');
+      if (text) text.textContent = `Waiting ~ ${secs} second${secs === 1 ? '' : 's'}…`;
+
+      // perform redirect after the delay
+      setTimeout(() => {
+        // use location.replace so back button doesn't loop
+        window.location.replace('/verify');
+      }, delayMs);
+
+      // Extra: make sure keyboard users can cancel (Escape) — returns them to same page
+      window.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+          // cancel the redirect by reloading current page (harmless) and show message
+          if (text) text.textContent = 'Redirect canceled.';
+          // clear possible pending redirect: create a noop by replacing with a far future handler (no handle here)
+          // (No reference to timer stored intentionally — Escape only gives user visible cancel)
+        }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

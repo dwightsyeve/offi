@@ -49,7 +49,7 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex gap-4 mb-6">
-              <Button size="lg" className="flex-1" onClick={() => navigate('/verify')}>
+              <Button size="lg" className="flex-1" onClick={() => navigate('/cart')}>
                 <ShoppingCart className="h-5 w-5 mr-2" />
                 Add to Cart
               </Button>

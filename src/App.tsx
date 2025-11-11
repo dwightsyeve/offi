@@ -8,6 +8,7 @@ import Shop from "./pages/Shop";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ProductDetail from "./pages/ProductDetail";
+import Cart from "./pages/Cart";
 import Verify from "./pages/Verify";
 import NotFound from "./pages/NotFound";
 
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/verify" element={<Verify />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/about" element={<About />} />
